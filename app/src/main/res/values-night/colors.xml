@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="status_ok">#4CD08A</color>
+    <color name="status_warn">#F0A25A</color>
+
+    <color name="overlay_surface">#1F2030</color>
+    <color name="overlay_stroke">#33FFFFFF</color>
+    <color name="overlay_item">#2B2D45</color>
+    <color name="overlay_text">#F1F1FA</color>
+    <color name="overlay_text_secondary">#A4A6C0</color>
+    <color name="overlay_ripple">#55A79EFF</color>
+    <color name="overlay_pill">#3A3C5E</color>
+</resources>

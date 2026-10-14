@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Chat bubble -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,34 H70 A8,8 0 0 1 78,42 V58 A8,8 0 0 1 70,66 H50 L40,76 V66 H38 A8,8 0 0 1 30,58 V42 A8,8 0 0 1 38,34 Z" />
+    <!-- Sparkle inside the bubble -->
+    <path
+        android:fillColor="#4C3FE0"
+        android:pathData="M54,41 L57,47.5 L63.5,50 L57,52.5 L54,59 L51,52.5 L44.5,50 L51,47.5 Z" />
+    <!-- Small accent sparkle -->
+    <path
+        android:fillColor="#FFC83D"
+        android:pathData="M76,30.5 L77.4,34.6 L81.5,36 L77.4,37.4 L76,41.5 L74.6,37.4 L70.5,36 L74.6,34.6 Z" />
+</vector>
