@@ -5,11 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!--
-        No SYSTEM_ALERT_WINDOW permission is required: the floating bubble is drawn as an
-        accessibility overlay (TYPE_ACCESSIBILITY_OVERLAY), which is granted together with the
-        Accessibility Service. BIND_ACCESSIBILITY_SERVICE is declared on the <service> below.
-    -->
+    <!-- Draw the floating bubble over other apps -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"

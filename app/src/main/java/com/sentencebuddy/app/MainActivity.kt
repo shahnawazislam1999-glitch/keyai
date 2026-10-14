@@ -37,11 +37,33 @@ class MainActivity : AppCompatActivity() {
         setUpStyleSection()
         setUpBubbleSection()
         refreshStatus()
+        requestRuntimePermissions()
     }
 
     override fun onResume() {
         super.onResume()
         refreshStatus()
+        if (!Settings.canDrawOverlays(this)) requestOverlayPermission()
+    }
+
+    private fun requestRuntimePermissions() {
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) !=
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 1)
+        }
+    }
+
+    private var askedOverlay = false
+
+    /** Opens the "Display over other apps" screen for this app (once per launch). */
+    private fun requestOverlayPermission() {
+        if (askedOverlay) return
+        askedOverlay = true
+        startActivity(
+            Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+        )
     }
 
     // ---------------------------------------------------------------------------------------------

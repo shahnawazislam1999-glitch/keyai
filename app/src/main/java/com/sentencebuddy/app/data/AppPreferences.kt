@@ -14,7 +14,7 @@ class AppPreferences private constructor(context: Context) {
         set(value) = sp.edit().putBoolean(KEY_ENABLED, value).apply()
 
     var apiKey: String
-        get() = sp.getString(KEY_API_KEY, "").orEmpty()
+        get() = sp.getString(KEY_API_KEY, "").orEmpty().ifBlank { DEFAULT_API_KEY }.takeUnless { it.startsWith("PASTE_") }.orEmpty()
         set(value) = sp.edit().putString(KEY_API_KEY, value.trim()).apply()
 
     var model: String
@@ -82,7 +82,11 @@ class AppPreferences private constructor(context: Context) {
     }
 
     companion object {
-        const val DEFAULT_MODEL = "gemini-2.5-flash-lite"
+        /** Paste your Gemini key here (https://aistudio.google.com/apikey) so the app works out of the box. */
+        const val DEFAULT_API_KEY = "PASTE_YOUR_GEMINI_API_KEY_HERE"
+
+        /** Google's alias that always points to the latest Flash model. */
+        const val DEFAULT_MODEL = "gemini-flash-latest"
 
         private const val FILE_NAME = "sentence_buddy_prefs"
 
