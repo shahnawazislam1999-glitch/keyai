@@ -26,14 +26,19 @@ class AppPreferences private constructor(context: Context) {
         get() = sp.getBoolean(KEY_SUGGESTION_MODE, false)
         set(value) = sp.edit().putBoolean(KEY_SUGGESTION_MODE, value).apply()
 
+    /** Whether the small floating bubble is visible. Off by default: the correction panel opens automatically. */
+    var showBubble: Boolean
+        get() = sp.getBoolean(KEY_SHOW_BUBBLE, false)
+        set(value) = sp.edit().putBoolean(KEY_SHOW_BUBBLE, value).apply()
+
     var tone: Tone
         get() = Tone.fromId(sp.getString(KEY_TONE, Tone.NATURAL.id))
         set(value) = sp.edit().putString(KEY_TONE, value.id).apply()
 
-    /** How many alternative sentences to request (3..6). */
+    /** How many alternative sentences to request (1..6). */
     var suggestionCount: Int
-        get() = sp.getInt(KEY_COUNT, 6).coerceIn(3, 6)
-        set(value) = sp.edit().putInt(KEY_COUNT, value.coerceIn(3, 6)).apply()
+        get() = sp.getInt(KEY_COUNT, 6).coerceIn(1, 6)
+        set(value) = sp.edit().putInt(KEY_COUNT, value.coerceIn(1, 6)).apply()
 
     /** Floating bubble opacity in percent (5..100). Default is a very faint 10%. */
     var bubbleOpacityPercent: Int
@@ -99,6 +104,7 @@ class AppPreferences private constructor(context: Context) {
         const val KEY_API_KEY = "api_key"
         const val KEY_MODEL = "model"
         const val KEY_TONE = "tone"
+        const val KEY_SHOW_BUBBLE = "show_bubble"
         const val KEY_SUGGESTION_MODE = "suggestion_mode"
         const val KEY_COUNT = "count"
         const val KEY_OPACITY = "bubble_opacity"

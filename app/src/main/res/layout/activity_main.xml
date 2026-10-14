@@ -237,7 +237,7 @@
                     android:id="@+id/sliderCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:valueFrom="3"
+                    android:valueFrom="1"
                     android:valueTo="6"
                     android:stepSize="1"
                     android:value="6" />
@@ -308,6 +308,12 @@
                     android:valueTo="2000"
                     android:stepSize="100"
                     android:value="900" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchShowBubble"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/switch_show_bubble" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/switchAutoShow"
