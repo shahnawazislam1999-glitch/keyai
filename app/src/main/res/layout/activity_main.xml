@@ -219,6 +219,13 @@
                     app:selectionRequired="true"
                     app:singleSelection="true" />
 
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switchSuggestionMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/switch_suggestion_mode" />
+
                 <TextView
                     android:id="@+id/labelCount"
                     android:layout_width="match_parent"

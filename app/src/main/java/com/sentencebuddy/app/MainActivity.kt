@@ -110,6 +110,9 @@ class MainActivity : AppCompatActivity() {
             prefs.tone = tone
         }
 
+        binding.switchSuggestionMode.isChecked = prefs.suggestionMode
+        binding.switchSuggestionMode.setOnCheckedChangeListener { _, checked -> prefs.suggestionMode = checked }
+
         // Suggestion count
         bindSlider(binding.sliderCount, prefs.suggestionCount) { value ->
             prefs.suggestionCount = value

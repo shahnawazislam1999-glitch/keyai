@@ -15,13 +15,23 @@ class SuggestionRepository(private val prefs: AppPreferences) {
         }
         val model = prefs.model
         val tone = prefs.tone
-        val count = prefs.suggestionCount
+        val correct = !prefs.suggestionMode
+        val count = if (correct) 1 else prefs.suggestionCount
 
-        val cacheKey = "$model|${tone.id}|$count|${text.trim().lowercase()}"
+        val cacheKey = "$model|${tone.id}|$count|$correct|${text.trim().lowercase()}"
         cache.get(cacheKey)?.let { return SuggestionResult.Success(it) }
 
-        val result = GeminiClient.suggest(key, model, text.trim(), tone, count)
-        if (result is SuggestionResult.Success) cache.put(cacheKey, result.items)
+        val result = GeminiClient.suggest(key, model, text.trim(), tone, count, correct)
+        if (result is SuggestionResult.Success) {
+            cache.put(cacheKey, result.items)
+            return result
+        }
+        // AI busy / offline: in correction mode still give a basic offline fix instead of an error.
+        val kind = (result as? SuggestionResult.Failure)?.kind
+        if (correct && (kind == SuggestionResult.Kind.RATE_LIMIT || kind == SuggestionResult.Kind.SERVER ||
+                kind == SuggestionResult.Kind.NETWORK || kind == SuggestionResult.Kind.UNKNOWN)) {
+            LocalCorrector.fix(text)?.let { return SuggestionResult.Success(listOf(it)) }
+        }
         return result
     }
 }

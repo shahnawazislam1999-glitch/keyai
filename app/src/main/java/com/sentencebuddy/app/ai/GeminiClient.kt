@@ -28,32 +28,56 @@ object GeminiClient {
         model: String,
         text: String,
         tone: Tone,
-        count: Int
+        count: Int,
+        correct: Boolean = false
     ): SuggestionResult = withContext(Dispatchers.IO) {
-        val url = "$BASE_URL$model:generateContent"
-        val body = buildRequest(model, text, tone, count)
-
+        // Each model has its own free quota, so if one is busy / over its limit we quietly try the next.
+        val models = (listOf(model) + FALLBACK_MODELS).distinct()
         var result: SuggestionResult = Failure(Kind.UNKNOWN, "Something went wrong. Please try again.")
-        for (attempt in 0..1) {
+        for ((index, m) in models.withIndex()) {
+            val url = "$BASE_URL$m:generateContent"
+            val body = buildRequest(m, text, tone, count, correct)
             result = try {
                 val (code, response) = post(url, apiKey, body)
-                if (code in 200..299) parseSuccess(response, text, count) else mapHttpError(code, response)
+                if (code in 200..299) parseSuccess(response, text, count, correct) else mapHttpError(code, response)
             } catch (e: IOException) {
                 Failure(Kind.NETWORK, "No internet connection. Check your network and try again.")
             } catch (e: Exception) {
                 Failure(Kind.UNKNOWN, "Unexpected error: ${e.message ?: e.javaClass.simpleName}")
             }
             val kind = (result as? Failure)?.kind
-            val retryable = kind == Kind.NETWORK || kind == Kind.SERVER
-            if (!retryable) break
-            if (attempt == 0) delay(500)
+            val tryNext = kind == Kind.RATE_LIMIT || kind == Kind.SERVER ||
+                (kind == Kind.BAD_RESPONSE && (result as Failure).message.startsWith("Model not found"))
+            if (kind == Kind.NETWORK && index == 0) {
+                delay(500)
+                continue
+            }
+            if (!tryNext) break
+            delay(250)
         }
         result
     }
 
+    private val FALLBACK_MODELS = listOf(
+        "gemini-flash-lite-latest",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash",
+        "gemini-2.0-flash"
+    )
+
     // ---------------------------------------------------------------------------------------------
     // Request
     // ---------------------------------------------------------------------------------------------
+
+    private fun buildCorrectionPrompt(): String = """
+        You are a proofreader inside a phone keyboard. The user is typing a chat message.
+        Correct the user's text: fix grammar, spelling, punctuation and capitalization.
+        Rules:
+        - Keep the original meaning, wording and tone. Change as little as possible. Do NOT rephrase or add anything.
+        - If the text is not English (for example Hindi or Hinglish), translate it into correct, natural English.
+        - Do NOT answer the text.
+        - Output only a JSON array containing exactly 1 string: the corrected message.
+    """.trimIndent()
 
     private fun buildSystemPrompt(tone: Tone, count: Int): String = """
         You are a writing assistant inside a phone keyboard. The user is typing a chat message and wants better ways to say it.
@@ -66,9 +90,9 @@ object GeminiClient {
         - Output only a JSON array of $count strings and nothing else.
     """.trimIndent()
 
-    private fun buildRequest(model: String, text: String, tone: Tone, count: Int): String {
+    private fun buildRequest(model: String, text: String, tone: Tone, count: Int, correct: Boolean): String {
         val generationConfig = JSONObject().apply {
-            put("temperature", 0.9)
+            put("temperature", if (correct) 0.2 else 0.9)
             put("responseMimeType", "application/json")
             put(
                 "responseSchema",
@@ -84,7 +108,7 @@ object GeminiClient {
         return JSONObject().apply {
             put(
                 "systemInstruction",
-                JSONObject().put("parts", JSONArray().put(JSONObject().put("text", buildSystemPrompt(tone, count))))
+                JSONObject().put("parts", JSONArray().put(JSONObject().put("text", (if (correct) buildCorrectionPrompt() else buildSystemPrompt(tone, count)))))
             )
             put(
                 "contents",
@@ -122,7 +146,7 @@ object GeminiClient {
     // Response
     // ---------------------------------------------------------------------------------------------
 
-    private fun parseSuccess(response: String, original: String, count: Int): SuggestionResult {
+    private fun parseSuccess(response: String, original: String, count: Int, correct: Boolean): SuggestionResult {
         val output = try {
             JSONObject(response)
                 .optJSONArray("candidates")
@@ -142,12 +166,12 @@ object GeminiClient {
         val originalNorm = original.trim().lowercase()
         val items = parseList(output)
             .map { it.trim().trim('"').trim() }
-            .filter { it.isNotEmpty() && it.lowercase() != originalNorm }
+            .filter { it.isNotEmpty() && (correct || it.lowercase() != originalNorm) }
             .distinctBy { it.lowercase() }
             .take(count)
 
         return if (items.isEmpty()) {
-            Failure(Kind.BAD_RESPONSE, "No new suggestions for this text. Try writing a bit more.")
+            Failure(Kind.BAD_RESPONSE, "Looks good already. Nothing to fix.")
         } else {
             Success(items)
         }
@@ -182,7 +206,7 @@ object GeminiClient {
             code == 404 ->
                 Failure(Kind.BAD_RESPONSE, "Model not found. Check the model name in the app.")
             code == 429 ->
-                Failure(Kind.RATE_LIMIT, "Free limit reached. Wait a minute and try again.")
+                Failure(Kind.RATE_LIMIT, "Busy right now. Please try again in a moment.")
             code >= 500 ->
                 Failure(Kind.SERVER, "Gemini is busy right now. Try again in a moment.")
             else ->

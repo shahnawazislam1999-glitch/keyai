@@ -21,6 +21,11 @@ class AppPreferences private constructor(context: Context) {
         get() = sp.getString(KEY_MODEL, DEFAULT_MODEL).orEmpty().ifBlank { DEFAULT_MODEL }
         set(value) = sp.edit().putString(KEY_MODEL, value.trim().ifBlank { DEFAULT_MODEL }).apply()
 
+    /** false = correct my sentence (default); true = show several alternative suggestions. */
+    var suggestionMode: Boolean
+        get() = sp.getBoolean(KEY_SUGGESTION_MODE, false)
+        set(value) = sp.edit().putBoolean(KEY_SUGGESTION_MODE, value).apply()
+
     var tone: Tone
         get() = Tone.fromId(sp.getString(KEY_TONE, Tone.NATURAL.id))
         set(value) = sp.edit().putString(KEY_TONE, value.id).apply()
@@ -94,6 +99,7 @@ class AppPreferences private constructor(context: Context) {
         const val KEY_API_KEY = "api_key"
         const val KEY_MODEL = "model"
         const val KEY_TONE = "tone"
+        const val KEY_SUGGESTION_MODE = "suggestion_mode"
         const val KEY_COUNT = "count"
         const val KEY_OPACITY = "bubble_opacity"
         const val KEY_SIZE = "bubble_size"

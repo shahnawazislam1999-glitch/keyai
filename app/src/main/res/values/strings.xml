@@ -16,10 +16,11 @@
     <string name="msg_copied">Couldn\'t edit the text box, so the sentence was copied. Paste it.</string>
 
     <!-- Main screen -->
-    <string name="main_subtitle">AI sentence suggestions while you type</string>
+    <string name="main_subtitle">Fixes your grammar while you type</string>
 
     <string name="section_status">Status</string>
-    <string name="switch_enabled">Suggestions enabled</string>
+    <string name="switch_enabled">Assistant enabled</string>
+    <string name="switch_suggestion_mode">Show suggestions (off = just correct my sentence)</string>
     <string name="status_service_on">Accessibility service: ON</string>
     <string name="status_service_off">Accessibility service: OFF</string>
     <string name="status_key_set">Gemini API key: saved</string>
