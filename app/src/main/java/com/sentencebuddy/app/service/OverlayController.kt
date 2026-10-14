@@ -393,8 +393,14 @@ class OverlayController(
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
-            y = bottomOffset()
+            if (prefs.panelX >= 0 && prefs.panelY >= 0) {
+                gravity = Gravity.TOP or Gravity.START
+                x = prefs.panelX.coerceIn(0, max(0, screen.x - width))
+                y = prefs.panelY.coerceIn(0, max(0, screen.y - context.dp(120)))
+            } else {
+                gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                y = bottomOffset()
+            }
         }
 
         try {
@@ -405,6 +411,7 @@ class OverlayController(
 
         panel = views
         panelParams = params
+        attachPanelDrag(root.findViewById<View>(R.id.panelTitle).parent as View)
         root.alpha = 0f
         root.translationY = context.dp(12).toFloat()
         root.animate().alpha(1f).translationY(0f).setDuration(160).start()
@@ -415,12 +422,57 @@ class OverlayController(
     private fun positionPanel() {
         val views = panel ?: return
         val params = panelParams ?: return
+        if (prefs.panelX >= 0 && prefs.panelY >= 0) return // user placed it: keep it there
         val offset = bottomOffset()
         if (params.y != offset) {
             params.y = offset
             try {
                 windowManager.updateViewLayout(views.root, params)
             } catch (_: Exception) {
+            }
+        }
+    }
+
+    /** Lets the user drag the panel by its title; the position is saved and reused next time. */
+    @SuppressLint("ClickableViewAccessibility")
+    private fun attachPanelDrag(handle: View) {
+        var downX = 0f
+        var downY = 0f
+        var startX = 0
+        var startY = 0
+        handle.setOnTouchListener { _, event ->
+            val views = panel ?: return@setOnTouchListener false
+            val params = panelParams ?: return@setOnTouchListener false
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    val loc = IntArray(2)
+                    views.root.getLocationOnScreen(loc)
+                    params.gravity = Gravity.TOP or Gravity.START
+                    params.x = loc[0]
+                    params.y = loc[1]
+                    downX = event.rawX
+                    downY = event.rawY
+                    startX = params.x
+                    startY = params.y
+                    handler.removeCallbacks(autoDismiss)
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val screen = screenSize()
+                    params.x = (startX + event.rawX - downX).toInt().coerceIn(0, max(0, screen.x - params.width))
+                    params.y = (startY + event.rawY - downY).toInt().coerceIn(0, max(0, screen.y - context.dp(120)))
+                    try {
+                        windowManager.updateViewLayout(views.root, params)
+                    } catch (_: Exception) {
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    prefs.savePanelPosition(params.x, params.y)
+                    scheduleAutoDismiss()
+                    true
+                }
+                else -> false
             }
         }
     }

@@ -75,12 +75,25 @@ class AppPreferences private constructor(context: Context) {
         get() = sp.getInt(KEY_BUBBLE_Y, -1)
         set(value) = sp.edit().putInt(KEY_BUBBLE_Y, value).apply()
 
+    /** Saved top-left position of the suggestion panel (-1 = not moved yet, sits above the keyboard). */
+    var panelX: Int
+        get() = sp.getInt(KEY_PANEL_X, -1)
+        set(value) = sp.edit().putInt(KEY_PANEL_X, value).apply()
+
+    var panelY: Int
+        get() = sp.getInt(KEY_PANEL_Y, -1)
+        set(value) = sp.edit().putInt(KEY_PANEL_Y, value).apply()
+
+    fun savePanelPosition(x: Int, y: Int) {
+        sp.edit().putInt(KEY_PANEL_X, x).putInt(KEY_PANEL_Y, y).apply()
+    }
+
     fun saveBubblePosition(x: Int, y: Int) {
         sp.edit().putInt(KEY_BUBBLE_X, x).putInt(KEY_BUBBLE_Y, y).apply()
     }
 
     fun resetBubblePosition() {
-        sp.edit().putInt(KEY_BUBBLE_X, -1).putInt(KEY_BUBBLE_Y, -1).apply()
+        sp.edit().putInt(KEY_BUBBLE_X, -1).putInt(KEY_BUBBLE_Y, -1).putInt(KEY_PANEL_X, -1).putInt(KEY_PANEL_Y, -1).apply()
     }
 
     fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
@@ -113,6 +126,8 @@ class AppPreferences private constructor(context: Context) {
         const val KEY_AUTO_SHOW = "auto_show"
         const val KEY_AUTO_SEND = "auto_send"
         const val KEY_WHATSAPP_ONLY = "whatsapp_only"
+        const val KEY_PANEL_X = "panel_x"
+        const val KEY_PANEL_Y = "panel_y"
         const val KEY_BUBBLE_X = "bubble_x"
         const val KEY_BUBBLE_Y = "bubble_y"
 
