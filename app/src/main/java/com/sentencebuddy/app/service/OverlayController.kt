@@ -316,9 +316,9 @@ class OverlayController(
         views.status.hide()
         views.openApp.hide()
         views.container.removeAllViews()
-        for (item in items) {
+        for ((index, item) in items.withIndex()) {
             val row = inflater.inflate(R.layout.item_suggestion, views.container, false) as TextView
-            row.text = item
+            row.text = if (index == 0) "\u2713  $item" else "\uD83D\uDCA1  $item"
             row.setOnClickListener {
                 it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                 listener.onSuggestionChosen(item)

@@ -15,8 +15,9 @@ class SuggestionRepository(private val prefs: AppPreferences) {
         }
         val model = prefs.model
         val tone = prefs.tone
-        val correct = !prefs.suggestionMode
-        val count = if (correct) 1 else prefs.suggestionCount
+        // First item is always the corrected sentence; optional extra suggestions follow it.
+        val correct = true
+        val count = if (prefs.suggestionMode) 1 + prefs.suggestionCount else 1
 
         val cacheKey = "$model|${tone.id}|$count|$correct|${text.trim().lowercase()}"
         cache.get(cacheKey)?.let { return SuggestionResult.Success(it) }

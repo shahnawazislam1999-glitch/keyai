@@ -69,15 +69,24 @@ object GeminiClient {
     // Request
     // ---------------------------------------------------------------------------------------------
 
-    private fun buildCorrectionPrompt(): String = """
+    private fun buildCorrectionPrompt(count: Int): String {
+        val extra = count - 1
+        val outputRule = if (extra <= 0) {
+            "- Output only a JSON array containing exactly 1 string: the corrected message."
+        } else {
+            "- Output only a JSON array of exactly $count strings. The FIRST string is the corrected message. " +
+                "The other $extra string(s) are different natural English ways to say the same thing, each clearly worded differently."
+        }
+        return """
         You are a proofreader inside a phone keyboard. The user is typing a chat message.
         Correct the user's text: fix grammar, spelling, punctuation and capitalization.
         Rules:
-        - Keep the original meaning, wording and tone. Change as little as possible. Do NOT rephrase or add anything.
+        - For the corrected message, keep the original meaning, wording and tone. Change as little as possible. Do NOT rephrase or add anything.
         - If the text is not English (for example Hindi or Hinglish), translate it into correct, natural English.
         - Do NOT answer the text.
-        - Output only a JSON array containing exactly 1 string: the corrected message.
-    """.trimIndent()
+        $outputRule
+        """.trimIndent()
+    }
 
     private fun buildSystemPrompt(tone: Tone, count: Int): String = """
         You are a writing assistant inside a phone keyboard. The user is typing a chat message and wants better ways to say it.
@@ -108,7 +117,7 @@ object GeminiClient {
         return JSONObject().apply {
             put(
                 "systemInstruction",
-                JSONObject().put("parts", JSONArray().put(JSONObject().put("text", (if (correct) buildCorrectionPrompt() else buildSystemPrompt(tone, count)))))
+                JSONObject().put("parts", JSONArray().put(JSONObject().put("text", (if (correct) buildCorrectionPrompt(count) else buildSystemPrompt(tone, count)))))
             )
             put(
                 "contents",

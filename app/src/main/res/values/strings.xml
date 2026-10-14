@@ -20,7 +20,7 @@
 
     <string name="section_status">Status</string>
     <string name="switch_enabled">Assistant enabled</string>
-    <string name="switch_suggestion_mode">Show suggestions (off = just correct my sentence)</string>
+    <string name="switch_suggestion_mode">Also show extra suggestions (off = only the corrected sentence)</string>
     <string name="status_service_on">Accessibility service: ON</string>
     <string name="status_service_off">Accessibility service: OFF</string>
     <string name="status_key_set">Gemini API key: saved</string>
@@ -40,7 +40,7 @@
     <string name="dialog_ok">OK</string>
 
     <string name="section_style">Suggestion style</string>
-    <string name="label_count">Suggestions per sentence: %1$d</string>
+    <string name="label_count">Extra suggestions: %1$d</string>
 
     <string name="section_bubble">Floating bubble</string>
     <string name="label_opacity">Bubble opacity: %1$d%%</string>

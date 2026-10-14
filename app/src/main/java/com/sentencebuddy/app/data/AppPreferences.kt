@@ -21,9 +21,9 @@ class AppPreferences private constructor(context: Context) {
         get() = sp.getString(KEY_MODEL, DEFAULT_MODEL).orEmpty().ifBlank { DEFAULT_MODEL }
         set(value) = sp.edit().putString(KEY_MODEL, value.trim().ifBlank { DEFAULT_MODEL }).apply()
 
-    /** false = correct my sentence (default); true = show several alternative suggestions. */
+    /** true (default) = corrected sentence plus extra suggestions; false = corrected sentence only. */
     var suggestionMode: Boolean
-        get() = sp.getBoolean(KEY_SUGGESTION_MODE, false)
+        get() = sp.getBoolean(KEY_SUGGESTION_MODE, true)
         set(value) = sp.edit().putBoolean(KEY_SUGGESTION_MODE, value).apply()
 
     /** Whether the small floating bubble is visible. Off by default: the correction panel opens automatically. */
@@ -37,7 +37,7 @@ class AppPreferences private constructor(context: Context) {
 
     /** How many alternative sentences to request (1..6). */
     var suggestionCount: Int
-        get() = sp.getInt(KEY_COUNT, 6).coerceIn(1, 6)
+        get() = sp.getInt(KEY_COUNT, 1).coerceIn(1, 6)
         set(value) = sp.edit().putInt(KEY_COUNT, value.coerceIn(1, 6)).apply()
 
     /** Floating bubble opacity in percent (5..100). Default is a very faint 10%. */
