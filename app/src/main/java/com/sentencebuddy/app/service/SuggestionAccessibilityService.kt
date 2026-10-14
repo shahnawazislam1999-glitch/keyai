@@ -170,7 +170,7 @@ class SuggestionAccessibilityService : AccessibilityService(), OverlayController
             return
         }
 
-        val showNow = userInitiated || prefs.autoShowPanel
+        val showNow = userInitiated || prefs.autoShowPanel || !prefs.showBubble
         if (showNow) overlay.showLoading(prefs.tone)
 
         requestJob?.cancel()

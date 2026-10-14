@@ -46,6 +46,7 @@
     <string name="label_opacity">Bubble opacity: %1$d%%</string>
     <string name="label_size">Bubble size: %1$d dp</string>
     <string name="label_delay">Suggest after I pause: %1$.1f s</string>
+    <string name="switch_show_bubble">Show floating bubble</string>
     <string name="switch_auto_show">Show suggestions automatically after I pause</string>
     <string name="switch_auto_send">Press Send after choosing (beta)</string>
     <string name="switch_whatsapp">Only work in WhatsApp</string>

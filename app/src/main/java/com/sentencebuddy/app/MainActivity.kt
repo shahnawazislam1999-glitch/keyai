@@ -134,6 +134,9 @@ class MainActivity : AppCompatActivity() {
             binding.labelDelay.text = getString(R.string.label_delay, value / 1000f)
         }
 
+        binding.switchShowBubble.isChecked = prefs.showBubble
+        binding.switchShowBubble.setOnCheckedChangeListener { _, checked -> prefs.showBubble = checked }
+
         binding.switchAutoShow.isChecked = prefs.autoShowPanel
         binding.switchAutoShow.setOnCheckedChangeListener { _, checked -> prefs.autoShowPanel = checked }
 

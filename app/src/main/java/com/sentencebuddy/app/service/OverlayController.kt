@@ -107,7 +107,8 @@ class OverlayController(
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                (if (prefs.showBubble) 0 else WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE),
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
@@ -171,6 +172,7 @@ class OverlayController(
 
     /** Briefly makes the faint bubble visible to say "suggestions are ready". */
     fun pulseBubble() {
+        if (!prefs.showBubble) return
         val root = bubbleRoot ?: return
         root.animate().cancel()
         root.animate()
@@ -274,7 +276,7 @@ class OverlayController(
         }
     }
 
-    private fun baseAlpha(): Float = prefs.bubbleOpacityPercent / 100f
+    private fun baseAlpha(): Float = if (prefs.showBubble) prefs.bubbleOpacityPercent / 100f else 0f
 
     /** Touch target is always at least 44dp even when the visible dot is tiny. */
     private fun touchSize(): Int = max(context.dp(44), context.dp(prefs.bubbleSizeDp) + context.dp(16))
