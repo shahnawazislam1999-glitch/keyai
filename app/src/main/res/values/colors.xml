@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_primary">#5B4DFF</color>
+    <color name="brand_primary_dark">#3A2FD6</color>
+    <color name="brand_accent">#FFD166</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="status_ok">#1E9E5A</color>
+    <color name="status_warn">#D9822B</color>
+
+    <!-- Floating panel -->
+    <color name="overlay_surface">#FFFFFF</color>
+    <color name="overlay_stroke">#1F000000</color>
+    <color name="overlay_item">#F1F0FF</color>
+    <color name="overlay_text">#1B1B2F</color>
+    <color name="overlay_text_secondary">#6B6B80</color>
+    <color name="overlay_ripple">#335B4DFF</color>
+    <color name="overlay_pill">#E4E1FF</color>
+</resources>

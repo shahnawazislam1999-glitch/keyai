@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sentence Buddy</string>
+    <string name="service_label">Sentence Buddy</string>
+    <string name="service_description">Reads the text you type so Sentence Buddy can suggest better English sentences, and writes the sentence you choose back into the text box. Your text is only sent to Google Gemini to create suggestions. Password fields are never read.</string>
+
+    <!-- Overlay -->
+    <string name="bubble_description">Sentence suggestions</string>
+    <string name="panel_title">Better ways to say it</string>
+    <string name="panel_loading">Thinking…</string>
+    <string name="panel_close">Close</string>
+    <string name="panel_minimize">Minimize to bubble (pause suggestions)</string>
+    <string name="panel_translate_title">Translation · %1$s</string>
+    <string name="panel_translate_loading">Translating…</string>
+    <string name="msg_translation_copied">Translation copied</string>
+    <string name="panel_open_app">Open settings</string>
+    <string name="panel_tone_hint">Tap to change tone</string>
+    <string name="msg_no_key">Add your free Gemini API key in the Sentence Buddy app first.</string>
+    <string name="msg_type_first">Type a sentence first, then tap the bubble.</string>
+    <string name="msg_copied">Couldn\'t edit the text box, so the sentence was copied. Paste it.</string>
+
+    <!-- Main screen -->
+    <string name="main_subtitle">Fixes your grammar while you type</string>
+
+    <string name="section_status">Status</string>
+    <string name="switch_enabled">Assistant enabled</string>
+    <string name="switch_suggestion_mode">Also show extra suggestions (off = only the corrected sentence)</string>
+    <string name="status_service_on">Accessibility service: ON</string>
+    <string name="status_service_off">Accessibility service: OFF</string>
+    <string name="status_key_set">Gemini API key: saved</string>
+    <string name="status_key_missing">Gemini API key: missing</string>
+    <string name="btn_enable_service">Enable</string>
+
+    <string name="section_api">Gemini AI (free)</string>
+    <string name="hint_api_key">Gemini API key</string>
+    <string name="hint_model">Model</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_get_key">Get free key</string>
+    <string name="btn_test">Test</string>
+    <string name="msg_saved">Saved</string>
+    <string name="test_title">Test: \"Tell me where is the Mango\"</string>
+    <string name="test_running">Testing…</string>
+    <string name="test_need_key">Enter your API key first.</string>
+    <string name="dialog_ok">OK</string>
+
+    <string name="section_style">Suggestion style</string>
+    <string name="label_count">Extra suggestions: %1$d</string>
+
+    <string name="section_bubble">Floating bubble</string>
+    <string name="label_opacity">Bubble opacity: %1$d%%</string>
+    <string name="label_size">Bubble size: %1$d dp</string>
+    <string name="label_delay">Suggest after I pause: %1$.1f s</string>
+    <string name="switch_show_bubble">Show floating bubble</string>
+    <string name="switch_auto_show">Show suggestions automatically after I pause</string>
+    <string name="switch_auto_send">Press Send after choosing (beta)</string>
+    <string name="switch_whatsapp">Only work in WhatsApp</string>
+    <string name="btn_reset_position">Reset bubble position</string>
+    <string name="msg_position_reset">Bubble position reset</string>
+
+    <string name="section_translate">Translate copied text</string>
+    <string name="switch_translate_copy">Translate when I copy text</string>
+    <string name="translate_help">এই টগল অন কৰিলে, আপুনি কোনো লিখনি কপি কৰাৰ লগে লগে ই নিজে নিজে আপুনি বাছনি কৰা ভাষালৈ (অসমীয়া, হিন্দী বা বাংলা) অনুবাদ হৈ পৰামৰ্শ হিচাপে দেখা যাব. অনুবাদত টিপিলে সেয়া কপি হ\'ব.\n\nWhen on, any text you copy is sent to Gemini and the translation pops up as a suggestion. Tap it to copy the translation. Turn it off if you copy private text.</string>
+    <string name="label_translate_language">Translate into</string>
+
+    <string name="section_guide">How to use</string>
+    <string name="guide_text">1. Save your Gemini API key and tap Test.\n2. Tap Enable and turn on Sentence Buddy in Accessibility settings.\n3. Open WhatsApp and type a sentence.\n4. Pause for a moment: better sentences pop up above the keyboard.\n5. Tap a sentence to put it in the text box. The tiny bubble (drag it anywhere) shows the suggestions again.\n6. Don\'t want suggestions right now? Tap the ⌄ button on the panel: it shrinks to a bubble and stops suggesting. Tap the bubble to get suggestions again.</string>
+    <string name="btn_app_info">Open app info</string>
+
+    <string name="dialog_enable_title">Turn on the service</string>
+    <string name="dialog_enable_message">In the next screen open \"Installed apps\" (or \"Downloaded apps\"), tap Sentence Buddy and switch it on.\n\nIf the switch is greyed out (Android 13+ for apps installed from an APK): open App info, tap the ⋮ menu and choose \"Allow restricted settings\", then try again.</string>
+    <string name="dialog_open_settings">Open Accessibility settings</string>
+    <string name="dialog_cancel">Cancel</string>
+</resources>
